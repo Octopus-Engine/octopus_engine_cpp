@@ -3,7 +3,7 @@
 
 #include "command/Command.hh"
 #include "state/Handle.hh"
-#include "state/entity/buff/TimedBuff.hh"
+#include "command/entity/EntityMoveCommand.hh"
 #include "utils/Vector.hh"
 
 #include <functional>
@@ -29,9 +29,17 @@ public:
 	/// @return true if command is over
 	virtual bool applyCommand(Step & step_p, State const &state_p, CommandData const *data_p, PathManager &pathManager_p) const override;
 
+	virtual void cleanUp(Step & step_p, State const &state_p, CommandData const *data_p) const override;
+
 	Handle _target {0};
 	Vector _pointTarget;
 	std::string _id;
+
+	virtual CommandData * getData() override { return _moveCommand.getData(); }
+	virtual CommandData const * getData() const override { return _moveCommand.getData(); }
+
+private:
+	EntityMoveCommand _moveCommand;
 };
 
 } // namespace octopus

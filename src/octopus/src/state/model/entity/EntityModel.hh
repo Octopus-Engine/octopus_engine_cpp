@@ -26,6 +26,7 @@ namespace octopus
 		std::function<bool(Step const &, State const &, Handle const &, Handle const &, Vector const &)> _checker = alwaysOkChecker;
 		bool _requireTargetPoint = false;
 		bool _requireTargetHandle = false;
+		Fixed _range = 0.;
 		Requirements _requirements;
 	};
 
