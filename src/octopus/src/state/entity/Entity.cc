@@ -22,6 +22,10 @@ Entity::Entity(Vector const &pos_p, bool frozen_p, EntityModel const &model_p)
 
 bool Entity::isIgnoringCollision() const
 {
+	if(_model._ignoreCollision)
+	{
+		return true;
+	}
 	if(getQueue().hasCommand())
 	{
 		return getData(getQueue().getFrontCommand()._var)
