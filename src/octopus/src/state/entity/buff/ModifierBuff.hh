@@ -9,6 +9,8 @@
 namespace octopus
 {
 
+/// @brief
+/// @warning This step can only revert to NoModifer!
 struct ModifierBuff : public BaseBuff
 {
 	/// @brief optional attack modifier
