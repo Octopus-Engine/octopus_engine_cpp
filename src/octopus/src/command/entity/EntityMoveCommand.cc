@@ -24,7 +24,7 @@ unsigned long long UnlockRoutine::MaxStepState = 500;
 Fixed UnlockRoutine::SquareDistanceMax = 2.25;
 
 EntityMoveCommand::EntityMoveCommand(Handle const &commandHandle_p, Handle const &source_p,
-		Vector const &finalPoint_p, unsigned long gridStatus_p, std::list<Vector> const &waypoints_p, bool init_p, bool neverStop_p)
+		Vector const &finalPoint_p, unsigned long gridStatus_p, std::list<Vector> const &waypoints_p, bool init_p, bool neverStop_p, bool ignoreFlock_p)
 	: Command(commandHandle_p)
 	, _source(source_p)
 	, _finalPoint(finalPoint_p)
@@ -33,6 +33,7 @@ EntityMoveCommand::EntityMoveCommand(Handle const &commandHandle_p, Handle const
 	, _init(init_p)
 	, _neverStop(neverStop_p)
 	, _data(_finalPoint, _gridStatus, _waypoints)
+	, _ignoreFlocking(ignoreFlock_p)
 {}
 
 void EntityMoveCommand::setFlockInformation(std::array<FlockInformation, 3> * flockInfo_p)
@@ -291,7 +292,7 @@ bool EntityMoveCommand::applyCommand(Step & step_p, State const &state_p, Comman
 
 	Vector delta_l = ent_l->_pos - data_l->_finalPoint;
 	Fixed tol_l = Fixed(100000, true)+_rayTolerance;
-	if(data_l->_flockInfo)
+	if(data_l->_flockInfo && !_ignoreFlocking)
 	{
 		Fixed newTol_l = ent_l->_model._ray + ent_l->_model._ray*data_l->_flockInfo->at(state_p._id).sqrtQtyReached*Fixed(1100000, true);
 		tol_l = std::max(tol_l, std::max(ent_l->_model._ray, newTol_l));

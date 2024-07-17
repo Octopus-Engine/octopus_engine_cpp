@@ -20,7 +20,7 @@ class EntityMoveCommand : public Command
 public:
 	EntityMoveCommand() {}
 	EntityMoveCommand(Handle const &commandHandle_p, Handle const &source_p,
-		Vector const &finalPoint_p, unsigned long gridStatus_p, std::list<Vector> const &waypoints_p, bool init_p=false, bool neverStop_p=false);
+		Vector const &finalPoint_p, unsigned long gridStatus_p, std::list<Vector> const &waypoints_p, bool init_p=false, bool neverStop_p=false, bool ignoreFlock_p=false);
 
 	void setFlockInformation(std::array<FlockInformation, 3> * flockInfo_p);
 
@@ -51,6 +51,8 @@ private:
 	bool _neverStop {false};
 	/// @brief this is an additional tolerance to the final point to avoid having entities trying to get into a static entity endelessly
 	Fixed _rayTolerance;
+	/// @brief ignore glocking information (this is used to avoid deadlock in flocking attack move commande)
+	bool _ignoreFlocking {false};
 
 	// data to be updated
 	MoveData _data;
