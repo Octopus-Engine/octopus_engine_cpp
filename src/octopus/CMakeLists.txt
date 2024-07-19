@@ -66,6 +66,7 @@ add_library(octopus
 	${CMAKE_CURRENT_SOURCE_DIR}/src/state/entity/buff/ModifierBuff.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/src/state/entity/buff/TimedBuff.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/src/state/entity/effects/PeriodicAreaOfDamage.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/src/state/entity/effects/ProjectileEffect.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/src/state/entity/Building.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/src/state/entity/Entity.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/src/state/entity/Resource.cc

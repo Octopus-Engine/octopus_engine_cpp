@@ -8,19 +8,6 @@
 namespace octopus
 {
 
-Vector getMove(Vector const &source_p, Vector const &target_p, Fixed const speed_p)
-{
-	Vector move_l = target_p - source_p;
-	Fixed length_l = length(move_l);
-	if(length_l < speed_p)
-	{
-		return move_l;
-	}
-	move_l *= speed_p/length_l;
-
-	return move_l;
-}
-
 void tickProjectile(Step &step_p, Projectile const &proj_p, State const &state_p)
 {
 	if(proj_p._done)
@@ -50,7 +37,7 @@ void tickProjectile(Step &step_p, Projectile const &proj_p, State const &state_p
 	// else move to target
 	else
 	{
-		step_p.getProjectileMoveStep().setMove(proj_p._index, getMove(proj_p._pos, target_l, proj_p._speed));
+		step_p.getProjectileMoveStep().setMove(proj_p._index, get_capped_direction(proj_p._pos, target_l, proj_p._speed));
 	}
 }
 

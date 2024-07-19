@@ -25,6 +25,8 @@ namespace octopus
 
 	bool same_direction(Vector const & a, Vector const & b);
 
+	Vector get_capped_direction(Vector const &source_p, Vector const &target_p, Fixed const &max_p);
+
 	bool is_zero(Vector const &v);
 }
 

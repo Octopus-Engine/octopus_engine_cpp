@@ -48,6 +48,21 @@ bool octopus::same_direction(Vector const & a, Vector const & b)
 	return diff_l < 1e-3 && diff_l > -1e-3;
 }
 
+octopus::Vector octopus::get_capped_direction(octopus::Vector const &source_p, octopus::Vector const &target_p, octopus::Fixed const &max_p)
+{
+	using namespace octopus;
+	Vector move_l = target_p - source_p;
+	Fixed length_l = length(move_l);
+	if(length_l < max_p)
+	{
+		return move_l;
+	}
+	move_l *= max_p/length_l;
+
+	return move_l;
+}
+
+
 bool octopus::is_zero(Vector const &v)
 {
 	return ::is_zero(v.x) && ::is_zero(v.y);
