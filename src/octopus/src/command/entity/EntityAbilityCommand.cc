@@ -17,6 +17,7 @@ EntityAbilityCommand::EntityAbilityCommand(Handle const &commandHandle_p, Handle
     , _target(target_p)
     , _pointTarget(pointTarget_p)
     , _id(id_p)
+	, _moveCommand(commandHandle_p, commandHandle_p, {0,0}, 0, {}, false, false, true)
 {}
 
 void EntityAbilityCommand::registerCommand(Step & step_p, State const &state_p)
@@ -55,7 +56,7 @@ bool inRange(State const &state_p, Handle const & source_p, Vector const & targe
 bool EntityAbilityCommand::applyCommand(Step & step_p, State const &state_p, CommandData const *data_p, PathManager &pathManager_p) const
 {
 	MoveData const &data_l = *static_cast<MoveData const *>(data_p);
-	Logger::getDebug() << "EntityAbilityCommand:: apply Command "<<_target <<std::endl;
+	Logger::getDebug() << "EntityAbilityCommand:: apply Command "<<_handleCommand <<std::endl;
 
 	Entity const * ent_l = state_p.getEntity(_handleCommand);
 
