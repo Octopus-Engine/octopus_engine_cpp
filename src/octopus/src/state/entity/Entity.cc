@@ -3,6 +3,7 @@
 #include <limits>
 
 #include "command/CommandData.hh"
+#include "command/entity/EntityAbilityCommand.hh"
 #include "step/command/CommandQueueStep.hh"
 #include "step/entity/EntityUpdateWaitingStep.hh"
 #include "step/Step.hh"
@@ -139,6 +140,21 @@ unsigned long getReloadAbilityTime(Entity const &ent_p, std::string const &key_p
 		return default_p;
 	}
 	return it_l->second;
+}
+
+bool isCasting(Entity const &ent_p, std::string const &id_p)
+{
+	if(ent_p.getQueue().hasCommand())
+	{
+		Command const *cmd_l = getCommandFromVar(ent_p.getQueue().getFrontCommand()._var);
+		EntityAbilityCommand const * ability_cmd_l = dynamic_cast<EntityAbilityCommand const *>(cmd_l);
+		if(!ability_cmd_l)
+		{
+			return false;
+		}
+		return ability_cmd_l->_id == id_p;
+	}
+	return false;
 }
 
 } // namespace octopus

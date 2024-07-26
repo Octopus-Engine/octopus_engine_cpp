@@ -137,6 +137,11 @@ namespace octopus
 	/// @param key_p the reload key to use
 	/// @param default_p the default value if the reload key is not found
 	unsigned long getReloadAbilityTime(Entity const &ent_p, std::string const &key_p, unsigned long const &default_p);
+
+	/// @brief return true if the entity is casting the ability (in its front command only)
+	/// @param ent_p entity to test
+	/// @param id_p id of the ability
+	bool isCasting(Entity const &ent_p, std::string const &id_p);
 }
 
 std::ostream &operator<<(std::ostream &os_p, octopus::Entity const &ent_p);

@@ -978,6 +978,66 @@ std::vector<Entity const *> getAllEntitiesInBox(Box<Fixed> const &box_p, State c
 	return result_l;
 }
 
+Entity const * getBestAbilityCaster(State const &state_p, std::list<Handle> const &handles_p, Vector const &target_p, std::string const &id_p)
+{
+	/// keep trace of closest that is not casting the ability
+	bool found_best_not_casting_l = false;
+	Fixed best_distance_not_casting_l;
+	Handle best_not_casting_l;
+	/// also keep trace of the closest regardless
+	bool found_best_overall_l = false;
+	Fixed best_distance_overall_l;
+	Handle best_overall_l;
+
+	for(Handle const &handle_l : handles_p)
+	{
+		if(!state_p.isEntityAlive(handle_l)) { continue; }
+		Entity const * ent_l = state_p.getEntity(handle_l);
+		Ability const & ability_l = getAbility(ent_l->_model, id_p);
+		// skip if the ability does not exists for the entity
+		if(ability_l._id != id_p) { continue; }
+
+		unsigned long min_reload_l = getMinReloadTime(ent_l->_model, ability_l._reloadKey);
+		unsigned long reload_l = getReloadAbilityTime(*ent_l, ability_l._reloadKey, min_reload_l);
+		// skip if not available
+		if(reload_l < min_reload_l)
+		{
+			continue;
+		}
+
+		//
+		Fixed distance_l = square_length(target_p - ent_l->_pos);
+
+		// test if casting
+		bool casting_l = isCasting(*ent_l, id_p);
+
+		if(distance_l < best_distance_overall_l || !found_best_overall_l)
+		{
+			best_distance_overall_l = distance_l;
+			best_overall_l = handle_l;
+			found_best_overall_l = true;
+		}
+
+		if(!casting_l
+		&& (distance_l < best_distance_not_casting_l || !found_best_not_casting_l))
+		{
+			best_distance_not_casting_l = distance_l;
+			best_not_casting_l = handle_l;
+			found_best_not_casting_l = true;
+		}
+	}
+
+	if(found_best_not_casting_l)
+	{
+		return state_p.getEntity(best_not_casting_l);
+	}
+
+	if(found_best_overall_l)
+	{
+		return state_p.getEntity(best_overall_l);
+	}
+	return nullptr;
+}
 
 void State::setIsOver(bool over_p)
 {

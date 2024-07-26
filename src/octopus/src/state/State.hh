@@ -314,6 +314,10 @@ bool noOutOfBounds(State const &state_p, Entity const &ent_p);
 /// of the entity
 std::vector<Entity const *> getAllEntitiesInBox(Box<Fixed> const &box_p, State const &state_p, bool includeRays_p);
 
+/// @brief return the closest entity of the target (position) that has cooldown up
+/// and is not already casting the ability
+Entity const * getBestAbilityCaster(State const &state_p, std::list<Handle> const &handles_p, Vector const &target_p, std::string const &id_p);
+
 } // namespace octopus
 
 #endif
