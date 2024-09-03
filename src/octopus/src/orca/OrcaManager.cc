@@ -105,7 +105,7 @@ void OrcaManager::setupStep(State const &state_p, Step &step_p)
         }
         else
         {
-            _sim->setAgentMaxSpeed(idx_l, ent_l->_model._stepSpeed);
+            _sim->setAgentMaxSpeed(idx_l, ent_l->getStepSpeed());
         }
         _sim->setAgentEntity(idx_l, ent_l);
         _sim->setAgentWeight(idx_l, 1);
