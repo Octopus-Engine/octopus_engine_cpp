@@ -316,7 +316,8 @@ std::vector<Entity const *> getAllEntitiesInBox(Box<Fixed> const &box_p, State c
 
 /// @brief return the closest entity of the target (position) that has cooldown up
 /// and is not already casting the ability
-Entity const * getBestAbilityCaster(State const &state_p, std::list<Handle> const &handles_p, Vector const &target_p, std::string const &id_p);
+/// @note if the ability has no target required all the entities with the ability will be returned
+std::vector<Entity const *> getBestAbilityCaster(State const &state_p, std::list<Handle> const &handles_p, Vector const &target_p, std::string const &id_p);
 
 } // namespace octopus
 

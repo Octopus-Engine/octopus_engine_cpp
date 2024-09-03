@@ -978,7 +978,7 @@ std::vector<Entity const *> getAllEntitiesInBox(Box<Fixed> const &box_p, State c
 	return result_l;
 }
 
-Entity const * getBestAbilityCaster(State const &state_p, std::list<Handle> const &handles_p, Vector const &target_p, std::string const &id_p)
+std::vector<Entity const *> getBestAbilityCaster(State const &state_p, std::list<Handle> const &handles_p, Vector const &target_p, std::string const &id_p)
 {
 	/// keep trace of closest that is not casting the ability
 	bool found_best_not_casting_l = false;
@@ -988,6 +988,8 @@ Entity const * getBestAbilityCaster(State const &state_p, std::list<Handle> cons
 	bool found_best_overall_l = false;
 	Fixed best_distance_overall_l;
 	Handle best_overall_l;
+
+	std::vector<Entity const *> vecEntities_l;
 
 	for(Handle const &handle_l : handles_p)
 	{
@@ -1002,6 +1004,13 @@ Entity const * getBestAbilityCaster(State const &state_p, std::list<Handle> cons
 		// skip if not available
 		if(reload_l < min_reload_l)
 		{
+			continue;
+		}
+
+		if(!ability_l._requireTargetPoint
+		&& !ability_l._requireTargetHandle)
+		{
+			vecEntities_l.push_back(ent_l);
 			continue;
 		}
 
@@ -1027,16 +1036,23 @@ Entity const * getBestAbilityCaster(State const &state_p, std::list<Handle> cons
 		}
 	}
 
+	// If we have already found entities
+	if(!vecEntities_l.empty())
+	{
+		return vecEntities_l;
+	}
+
 	if(found_best_not_casting_l)
 	{
-		return state_p.getEntity(best_not_casting_l);
+		return {state_p.getEntity(best_not_casting_l)};
 	}
 
 	if(found_best_overall_l)
 	{
-		return state_p.getEntity(best_overall_l);
+		return {state_p.getEntity(best_overall_l)};
 	}
-	return nullptr;
+	// empty
+	return vecEntities_l;
 }
 
 void State::setIsOver(bool over_p)
