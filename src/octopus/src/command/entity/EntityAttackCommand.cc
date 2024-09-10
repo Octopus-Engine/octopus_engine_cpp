@@ -57,7 +57,7 @@ bool EntityAttackCommand::applyCommand(Step & step_p, State const &state_p, Comm
 		// reset wind up
 		step_p.addSteppable(new CommandWindUpDiffStep(_handleCommand, - windup_l));
 		// If target is dead we look for another target in range
-		Entity const * newTarget_l = lookUpNewTarget(state_p, _source, entSource_l->_aggroDistance, heal_l);
+		Entity const * newTarget_l = lookUpNewTarget(state_p, _source, entSource_l->_model._aggroDistance, heal_l);
 
 		// If no target relese or we move to the entity if healing
 		if(!newTarget_l)
@@ -112,7 +112,7 @@ bool EntityAttackCommand::applyCommand(Step & step_p, State const &state_p, Comm
 			// reset waiting
 			step_p.addSteppable(new EntityUpdateWaitingStep(entSource_l->_handle, entSource_l->_waiting, 0));
 			// If target is dead we look for another target in range
-			Entity const * newTarget_l = lookUpNewTarget(state_p, _source, entSource_l->_aggroDistance, heal_l);
+			Entity const * newTarget_l = lookUpNewTarget(state_p, _source, entSource_l->_model._aggroDistance, heal_l);
 
 			// If target we update
 			if(newTarget_l && newTarget_l->_handle != curTarget_l)
@@ -186,7 +186,7 @@ bool EntityAttackCommand::applyCommand(Step & step_p, State const &state_p, Comm
 					projectile_l._source = _source;
 					projectile_l._sourceModel = &entSource_l->_model;
 					projectile_l._sourceTeam = playerSource_l->_team;
-					projectile_l._speed = 0.1;
+					projectile_l._speed = entSource_l->_model._projectileSpeed;
 					projectile_l._baseDamage = attackModData_l.baseDamage;
 					projectile_l._bonusDamage = attackModData_l.bonusDamage;
 					projectile_l._generator = entSource_l->_attackMod;
@@ -205,7 +205,7 @@ bool EntityAttackCommand::applyCommand(Step & step_p, State const &state_p, Comm
 			if(entTarget_l->_model._isBuilding)
 			{
 				// If target is dead we look for another target in range
-				Entity const * newTarget_l = lookUpNewTarget(state_p, _source, entSource_l->_aggroDistance, heal_l);
+				Entity const * newTarget_l = lookUpNewTarget(state_p, _source, entSource_l->_model._aggroDistance, heal_l);
 				if(newTarget_l && newTarget_l->_model._isUnit)
 				{
 					Logger::getDebug() << "EntityAttackCommand:: new target found (out of range) "<<newTarget_l->_handle<<std::endl;

@@ -33,14 +33,13 @@ using namespace octopus;
 TEST(attackMoveHealCommandTest, simple)
 {
 	octopus::UnitModel unitModel_l { false, 1., 1., 10. };
+	unitModel_l._aggroDistance = 5.;
 	unitModel_l._heal = 1;
 
 	Unit ent_l { { 11, 3.5 }, false, unitModel_l};
-	ent_l._aggroDistance = 5.;
 	ent_l._hp = 5;
 
 	Unit ent2_l { { 3, 3.5 }, false, unitModel_l};
-	ent2_l._aggroDistance = 5.;
 
 	UnitSpawnStep * spawn0_l = new UnitSpawnStep(Handle(0), ent2_l);
 	UnitSpawnStep * spawn1_l = new UnitSpawnStep(Handle(1), ent_l);

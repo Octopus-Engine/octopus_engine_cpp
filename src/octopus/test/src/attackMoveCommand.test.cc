@@ -33,14 +33,13 @@ using namespace octopus;
 TEST(attackMoveCommandTest, simple)
 {
 	octopus::UnitModel unitModel_l { false, 1., 1., 10. };
+	unitModel_l._aggroDistance = 5.;
 
 	Unit ent_l { { 11, 3.5 }, false, unitModel_l};
 	ent_l._player = 1;
-	ent_l._aggroDistance = 5.;
 
 	Unit ent2_l { { 3, 3.5 }, false, unitModel_l};
 	ent2_l._player = 0;
-	ent2_l._aggroDistance = 5.;
 
 	UnitSpawnStep * spawn0_l = new UnitSpawnStep(Handle(0), ent2_l);
 	UnitSpawnStep * spawn1_l = new UnitSpawnStep(Handle(1), ent_l);

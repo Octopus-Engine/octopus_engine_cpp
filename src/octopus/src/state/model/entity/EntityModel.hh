@@ -98,8 +98,11 @@ namespace octopus
 
 		/// @brief if projectile attack
 		bool _projectile {false};
+		Fixed _projectileSpeed = 0.1;
 
 		bool _ignoreCollision {false};
+
+		Fixed _aggroDistance = 8;
 	};
 
 	std::map<std::string, Fixed> getReverseCostMap(std::map<std::string, Fixed> const &cost_p);

@@ -30,6 +30,7 @@ using namespace octopus;
 TEST(attackMoveBuffCommandTest, simple)
 {
 	octopus::UnitModel unit1Model_l { false, 1., 1., 10. };
+	unit1Model_l._aggroDistance = 5.;
 
 	octopus::UnitModel unit2Model_l { false, 1., 1., 10. };
 	unit2Model_l._buffer._active = true;
@@ -38,12 +39,11 @@ TEST(attackMoveBuffCommandTest, simple)
 	unit2Model_l._buffer._buff._duration = 2;
 	unit2Model_l._buffer._buff._id = "speed";
 	unit2Model_l._buffer._buff._coef = 1.;
+	unit2Model_l._aggroDistance = 5.;
 
 	Unit ent_l { { 11, 3.5 }, false, unit1Model_l};
-	ent_l._aggroDistance = 5.;
 
 	Unit ent2_l { { 3, 3.5 }, false, unit2Model_l};
-	ent2_l._aggroDistance = 5.;
 
 	UnitSpawnStep * spawn0_l = new UnitSpawnStep(Handle(0), ent2_l);
 	UnitSpawnStep * spawn1_l = new UnitSpawnStep(Handle(1), ent_l);

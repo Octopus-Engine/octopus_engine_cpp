@@ -52,7 +52,7 @@ Command * commandFromIdle(Entity const &ent_p, State const &state_p, unsigned lo
 		Logger::getDebug() << " Unit::runCommands :: no command (attack)"<< std::endl;
 		if(ent_p._waiting >= waitingTimeForAttackScan_p)
 		{
-			Entity const * target_l = lookUpNewTarget(state_p, ent_p._handle, ent_p._aggroDistance, ent_p._model._heal > 1e-3);
+			Entity const * target_l = lookUpNewTarget(state_p, ent_p._handle, ent_p._model._aggroDistance, ent_p._model._heal > 1e-3);
 			if(target_l)
 			{
 				Logger::getDebug() << " Unit::runCommands :: add attack command" << ent_p._handle << " -> " << target_l->_handle << std::endl;
