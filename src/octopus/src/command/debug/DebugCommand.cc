@@ -19,7 +19,7 @@ DebugCommand::DebugCommand(Library &lib_p)
 
 void DebugCommand::registerCommand(Step & step_p, State const &state_p)
 {
-	Logger::getDebug() << "DebugCommand:: register Command "<<std::endl;
+	Logger::getNormal() << "DebugCommand:: register Command "<<std::endl;
 	// step_p.addSteppable(steppable_l);
 
 	Unit unit_l({42,10}, false, _lib->getUnitModel("triangle"));

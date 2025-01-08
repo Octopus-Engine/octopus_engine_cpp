@@ -39,7 +39,13 @@ public:
 
 	virtual void registerCommand(Step & step_p, State const &state_p) override
 	{
-		Logger::getDebug() << "GenericMoveCommand:: register Command "<<_target<<std::endl;
+		std::stringstream ss_l;
+		ss_l << "GenericMoveCommand:: register Command "<<_target<<" ";
+		for(Handle handle_l : _handles)
+		{
+			ss_l<<handle_l<<" ";
+		}
+		Logger::getNormal() << ss_l.str() <<std::endl;
 		step_p.addSteppable(new CommandStorageStep(this));
 
 		std::list<Handle> flocking_handles_l;

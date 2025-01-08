@@ -20,7 +20,7 @@ PlayerChoseOptionCommand::PlayerChoseOptionCommand(unsigned long player_p, std::
 
 void PlayerChoseOptionCommand::registerCommand(Step & step_p, State const &state_p)
 {
-	Logger::getDebug() << "PlayerChoseOptionCommand:: apply Command "<<_player <<std::endl;
+	Logger::getNormal() << "PlayerChoseOptionCommand:: apply Command player = "<<_player << ", key = "<<_key <<std::endl;
 	// check for available option
 	Player const & player_l = *state_p.getPlayer(_player);
 

@@ -32,6 +32,17 @@ Fixed const & EntityFlockMoveCommand::getRayTolerance() const
 
 void EntityFlockMoveCommand::registerCommand(Step &step_p, State const &state_p)
 {
+	std::stringstream ss_l;
+	ss_l << "EntityFlockMoveCommand:: "
+						<< "finalPoint = "<<_finalPoint
+						<< ", attackMove = "<<_attackMove
+						<< ", neverStop = "<<_neverStop << std::endl;
+	ss_l << "EntityFlockMoveCommand::";
+	for(Handle const &handle_l : _handles)
+	{
+		ss_l << " "<<handle_l;
+	}
+	Logger::getNormal() << ss_l.str() << std::endl;
 	// just store this command
 	step_p.addSteppable(new CommandStorageStep(this));
 

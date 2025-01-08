@@ -23,7 +23,7 @@ BuildingAutoBuildCommand::BuildingAutoBuildCommand(Handle const &source_p, UnitM
 
 void BuildingAutoBuildCommand::registerCommand(Step & step_p, State const &state_p)
 {
-	Logger::getDebug() << "BuildingAutoBuildCommand:: register Command "<<_source <<std::endl;
+	Logger::getNormal() << "BuildingAutoBuildCommand:: register Command "<<_source <<std::endl;
 	Building const * building_l = dynamic_cast<Building const *>(state_p.getEntity(_source));
 	Player const & player_l = *state_p.getPlayer(building_l->_player);
 

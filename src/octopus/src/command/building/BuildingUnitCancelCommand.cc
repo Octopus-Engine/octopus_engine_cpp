@@ -16,7 +16,7 @@ namespace octopus
 
 void BuildingUnitCancelCommand::registerCommand(Step & step_p, State const &state_p)
 {
-	Logger::getDebug() << "BuildingUnitCancelCommand:: register Command "<<_handleCommand <<std::endl;
+	Logger::getNormal() << "BuildingUnitCancelCommand:: register Command "<<_handleCommand <<std::endl;
 	Entity const * ent_l = state_p.getEntity(_handleCommand);
 
 	step_p.addSteppable(new CommandStorageStep(this));

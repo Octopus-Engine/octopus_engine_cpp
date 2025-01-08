@@ -68,7 +68,7 @@ bool depostInRange(State const &state_p, Unit const * unit_p, Handle const res_p
 
 bool UnitDropCommand::applyCommand(Step & step_p, State const &state_p, CommandData const *data_p, PathManager &pathManager_p) const
 {
-	Logger::getDebug() << "UnitDropCommand:: apply Command "<<_source <<std::endl;
+	Logger::getNormal() << "UnitDropCommand:: apply Command "<<_source <<std::endl;
 	MoveData const &data_l = *static_cast<MoveData const *>(data_p);
 
 	Unit const * unit_l = dynamic_cast<Unit const *>(state_p.getEntity(_source));
@@ -83,7 +83,7 @@ bool UnitDropCommand::applyCommand(Step & step_p, State const &state_p, CommandD
 	// else on the way to deposit
 	if(depostInRange(state_p, unit_l, _deposit))
 	{
-		Logger::getDebug() << "UnitDropCommand:: drop"<<std::endl;
+		Logger::getNormal() << "UnitDropCommand:: drop"<<std::endl;
 
 		step_p.addSteppable(new UnitHarvestDropStep(_source, unit_l->_quantityOfResource, unit_l->_quantityOfResource * deposit_l->getHarvest()));
 
@@ -91,7 +91,7 @@ bool UnitDropCommand::applyCommand(Step & step_p, State const &state_p, CommandD
 	}
 	else
 	{
-		Logger::getDebug() << "UnitDropCommand:: move to deposit"<<std::endl;
+		Logger::getNormal() << "UnitDropCommand:: move to deposit"<<std::endl;
 		// apply move
 		_subMoveCommand.applyCommand(step_p, state_p, data_p, pathManager_p);
 	}

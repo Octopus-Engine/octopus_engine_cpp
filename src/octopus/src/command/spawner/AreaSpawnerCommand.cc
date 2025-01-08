@@ -36,7 +36,7 @@ void spawn(State const &state_p, Step & step_p, Entity const *model_p, Option co
 	Vector pos_l {option_p.x + numeric::ceil(2*model_p->_model._ray)/2., option_p.y + numeric::ceil(2*model_p->_model._ray)/2. };
 	if(model_p->_model._isUnit)
 	{
-		Logger::getDebug()<<"AreaSpawnerCommand :: spawn unit at " << pos_l<<std::endl;
+		Logger::getNormal()<<"AreaSpawnerCommand :: spawn unit at " << pos_l<<std::endl;
 		Unit unit_l(*dynamic_cast<Unit const *>(model_p));
 		unit_l._pos = pos_l;
 
@@ -44,7 +44,7 @@ void spawn(State const &state_p, Step & step_p, Entity const *model_p, Option co
 	}
 	else if(model_p->_model._isBuilding)
 	{
-		Logger::getDebug()<<"AreaSpawnerCommand :: spawn building at " << pos_l<<std::endl;
+		Logger::getNormal()<<"AreaSpawnerCommand :: spawn building at " << pos_l<<std::endl;
 		Building building_l(*dynamic_cast<Building const *>(model_p));
 		building_l._pos = pos_l;
 
@@ -53,13 +53,13 @@ void spawn(State const &state_p, Step & step_p, Entity const *model_p, Option co
 		// special case for abandonned temple
 		if(model_p->_model._isAbandonedTemple)
 		{
-			Logger::getDebug()<<"AreaSpawnerCommand :: spawn abandonned temple at " << pos_l<<std::endl;
+			Logger::getNormal()<<"AreaSpawnerCommand :: spawn abandonned temple at " << pos_l<<std::endl;
 			step_p.addSteppable(new StateTemplePositionAddStep(pos_l));
 		}
 	}
 	else if(model_p->_model._isResource)
 	{
-		Logger::getDebug()<<"AreaSpawnerCommand :: spawn resource at " << pos_l<<std::endl;
+		Logger::getNormal()<<"AreaSpawnerCommand :: spawn resource at " << pos_l<<std::endl;
 		Resource res_l(*dynamic_cast<Resource const *>(model_p));
 		res_l._pos = pos_l;
 
@@ -67,7 +67,7 @@ void spawn(State const &state_p, Step & step_p, Entity const *model_p, Option co
 	}
 	else
 	{
-		Logger::getDebug()<<"AreaSpawnerCommand :: spawn entity at " << pos_l<<std::endl;
+		Logger::getNormal()<<"AreaSpawnerCommand :: spawn entity at " << pos_l<<std::endl;
 		Entity entity_l(*model_p);
 		entity_l._pos = pos_l;
 		step_p.addSteppable(new EntitySpawnStep(getNextHandle(step_p, state_p), entity_l));
@@ -81,7 +81,7 @@ void update(SpawningGrid &grid_p, EntityModel const &model_p, Option const &opti
 
 void AreaSpawnerCommand::registerCommand(Step & step_p, State const &state_p)
 {
-	Logger::getDebug() << "AreaSpawnerCommand:: register Command "<<std::endl;
+	Logger::getNormal() << "AreaSpawnerCommand:: register Command "<<std::endl;
 
 	/// init grid from state
 	SpawningGrid grid_l(state_p.getPathGrid().getSizeX());

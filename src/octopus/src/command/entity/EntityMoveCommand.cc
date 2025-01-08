@@ -127,7 +127,7 @@ bool EntityMoveCommand::applyCommand(Step & step_p, State const &state_p, Comman
 	// No waypoint -> terminate
 	if(waypoints_l.empty())
 	{
-		Logger::getDebug() << "no waypoint (entry)" << std::endl;
+		Logger::getNormal() << "no waypoint (entry)" << std::endl;
 		return true;
 	}
 
@@ -147,7 +147,7 @@ bool EntityMoveCommand::applyCommand(Step & step_p, State const &state_p, Comman
 		step_p.addSteppable(new CommandMoveUpdateStep(_handleCommand, data_l->_stepSinceUpdate, data_l->_gridStatus, data_l->_gridStatus));
 		// perform a line check
 		los_l = losCheck(state_p.getPathGrid(), ent_l->_pos, data_l->_finalPoint);
-		Logger::getDebug() << "los check returned " << los_l << std::endl;
+		Logger::getNormal() << "los check returned " << los_l << std::endl;
 		step_p.addSteppable(new CommandMoveLosStep(_handleCommand, data_l->_los, los_l));
 	}
 	// increment step since update (everytime otherwise will loop reseting)
@@ -213,12 +213,12 @@ bool EntityMoveCommand::applyCommand(Step & step_p, State const &state_p, Comman
 				if(length_prod_l > 0)
 				{
 					Fixed dot_prod_l = dot_product(repulsion_l, to_target_point_l);
-					Logger::getDebug() << "routine "<<ent_l->_handle<<std::endl;
-					Logger::getDebug() << "\trepulsion_l = "<<repulsion_l<<std::endl;
-					Logger::getDebug() << "\tto_target_point_l = "<<to_target_point_l<<std::endl;
-					Logger::getDebug() << "\tdot_prod_l = "<<dot_prod_l<<std::endl;
-					Logger::getDebug() << "\tlength_prod_l = "<<length_prod_l<<std::endl;
-					Logger::getDebug() << "\tdot_prod_sq = "<<dot_prod_l*dot_prod_l/length_prod_l<<std::endl;
+					Logger::getNormal() << "routine "<<ent_l->_handle<<std::endl;
+					Logger::getNormal() << "\trepulsion_l = "<<repulsion_l<<std::endl;
+					Logger::getNormal() << "\tto_target_point_l = "<<to_target_point_l<<std::endl;
+					Logger::getNormal() << "\tdot_prod_l = "<<dot_prod_l<<std::endl;
+					Logger::getNormal() << "\tlength_prod_l = "<<length_prod_l<<std::endl;
+					Logger::getNormal() << "\tdot_prod_sq = "<<dot_prod_l*dot_prod_l/length_prod_l<<std::endl;
 
 					if(dot_prod_l*dot_prod_l/length_prod_l > 0.5*0.5)
 					{
@@ -239,12 +239,12 @@ bool EntityMoveCommand::applyCommand(Step & step_p, State const &state_p, Comman
 						}
 
 						next_l = ent_l->_pos + new_dir_l/length(new_dir_l)*ent_l->getStepSpeed()*UnlockRoutine::MaxStepState;
-						Logger::getDebug() << "updated next_l = "<<next_l - ent_l->_pos<<std::endl;
+						Logger::getNormal() << "updated next_l = "<<next_l - ent_l->_pos<<std::endl;
 						newRoutine_l._targetPoint = next_l;
 					}
 					else
 					{
-						Logger::getDebug() << "stop routine next_l = "<<next_l - ent_l->_pos<<std::endl;
+						Logger::getNormal() << "stop routine next_l = "<<next_l - ent_l->_pos<<std::endl;
 						// stop routine
 						newRoutine_l._enabled = false;
 					}
@@ -260,7 +260,7 @@ bool EntityMoveCommand::applyCommand(Step & step_p, State const &state_p, Comman
 				else
 				{
 					next_l = data_l->_finalPoint;
-					Logger::getDebug() << "stop routine no neighbour = "<<next_l - ent_l->_pos<<std::endl;
+					Logger::getNormal() << "stop routine no neighbour = "<<next_l - ent_l->_pos<<std::endl;
 					// stop routine
 					newRoutine_l._targetPoint = next_l;
 					step_p.addSteppable(new CommandMoveUnlockRoutineStep(_handleCommand, data_l->_unlockRoutine, newRoutine_l));
@@ -300,7 +300,7 @@ bool EntityMoveCommand::applyCommand(Step & step_p, State const &state_p, Comman
 	// No more waypoint -> terminate
 	if(square_length(delta_l) < tol_l*tol_l)
 	{
-		Logger::getDebug() << "no waypoint" << std::endl;
+		Logger::getNormal() << "no waypoint" << std::endl;
 		step_p.addSteppable(new CommandUpdateFlockingReached(_handleCommand));
 		return true;
 	}
@@ -315,7 +315,7 @@ bool EntityMoveCommand::applyCommand(Step & step_p, State const &state_p, Comman
 		Fixed sqLastDiff_l = square_length(ent_l->_pos - data_l->_lastPos);
 		if(sqLastDiff_l < 0.5 && data_l->_countSinceProgress == 50)
 		{
-			Logger::getDebug() << "almost no move : " << _handleCommand.index
+			Logger::getNormal() << "almost no move : " << _handleCommand.index
 								<< " since progress "<<data_l->_countSinceProgress << " setp id " << step_p.getId() << std::endl;
 			if(!data_l->_unlockRoutine._enabled && !data_l->_ignoreCollision)
 			{
@@ -346,7 +346,7 @@ bool EntityMoveCommand::applyCommand(Step & step_p, State const &state_p, Comman
 		}
 	}
 
-	Logger::getDebug() << "Adding move step orig = "<<ent_l->_pos<<" target = "<<next_l<<" step speed = " << ent_l->getStepSpeed() << std::endl;
+	Logger::getNormal() << "Adding move step orig = "<<ent_l->_pos<<" target = "<<next_l<<" step speed = " << ent_l->getStepSpeed() << std::endl;
 
 	// Use next waypoint as target
 	step_p.addEntityMoveStep(new EntityMoveStep(createEntityMoveStep(*ent_l, next_l, ent_l->getStepSpeed())));

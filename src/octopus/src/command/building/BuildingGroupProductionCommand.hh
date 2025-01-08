@@ -1,6 +1,7 @@
 #ifndef __BuildingGroupProductionCommand__
 #define __BuildingGroupProductionCommand__
 
+#include "logger/Logger.hh"
 #include "command/Command.hh"
 
 #include "command/CommandHelpers.hh"
@@ -93,15 +94,21 @@ public:
 		}
 	}
 
-	/// @brief register the command into the step
-	/// This method is responsible to
-	/// handle cost of command and spawning command in step
 	virtual void registerCommand(Step & step_p, State const &state_p) override
 	{
+		std::stringstream ss_l;
+		ss_l << "BuildingGroupProductionCommand:: register Command "<<(_model?_model->_id:"null")<<" ";
+		for(Handle handle_l : _handles)
+		{
+			ss_l<<handle_l<<" ";
+		}
+		Logger::getNormal() << ss_l.str() <<std::endl;
+
 		step_p.addSteppable(new CommandStorageStep(this));
 		if(!_model) return;
 
         Handle best_l = getBestProductionBuilding(_handles, state_p, *_model);
+		Logger::getNormal() << "BuildingGroupProductionCommand:: best "<<best_l <<std::endl;
 
         if(best_l.index < state_p.getEntities().size())
         {

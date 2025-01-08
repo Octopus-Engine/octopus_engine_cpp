@@ -31,7 +31,7 @@ BuildingRallyPointCommand::BuildingRallyPointCommand(Handle const &handle_p)
 
 void BuildingRallyPointCommand::registerCommand(Step & step_p, State const &state_p)
 {
-	Logger::getDebug() << "BuildingRallyPointCommand:: register Command "<<_handleCommand <<std::endl;
+	Logger::getNormal() << "BuildingRallyPointCommand:: register Command "<<_handleCommand <<std::endl;
 
 	if(_reset)
 	{

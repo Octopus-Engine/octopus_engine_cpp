@@ -101,7 +101,7 @@ bool isLockedAlready(Unit const &unit_p, Resource const &res_p, int idx_p)
 
 bool UnitHarvestCommand::applyCommand(Step & step_p, State const &state_p, CommandData const *data_p, PathManager &pathManager_p) const
 {
-	Logger::getDebug() << "UnitHarvestCommand:: apply Command "<<_source <<std::endl;
+	Logger::getNormal() << "UnitHarvestCommand:: apply Command "<<_source <<std::endl;
 	HarvestMoveData const &data_l = *static_cast<HarvestMoveData const *>(data_p);
 	Unit const * unit_l = dynamic_cast<Unit const *>(state_p.getEntity(_source));
 	Resource const * res_l = dynamic_cast<Resource const *>(state_p.getEntity(data_l._resource));
@@ -110,12 +110,12 @@ bool UnitHarvestCommand::applyCommand(Step & step_p, State const &state_p, Comma
 	// Is resource exhausted and harvesting
 	if(notFull_l && resourceExhausted(state_p, data_l._resource) && data_l._harvesting)
 	{
-		Logger::getDebug() << "UnitHarvestCommand:: resource exhausted "<<data_l._resource <<std::endl;
+		Logger::getNormal() << "UnitHarvestCommand:: resource exhausted "<<data_l._resource <<std::endl;
 		// Look up for new target
 		Entity const * newRes_l = lookUpNewResource(state_p, _source, data_l._resource);
 		if(newRes_l)
 		{
-			Logger::getDebug() << "UnitHarvestCommand:: new resource "<<newRes_l->_handle <<std::endl;
+			Logger::getNormal() << "UnitHarvestCommand:: new resource "<<newRes_l->_handle <<std::endl;
 			// update move
 			step_p.addSteppable(new CommandDataWaypointSetStep(_handleCommand, data_l._waypoints, {newRes_l->_pos}));
 			step_p.addSteppable(new CommandMoveUpdateStep(_handleCommand, data_l._stepSinceUpdate, data_l._gridStatus, state_p.getPathGridStatus()));
@@ -125,15 +125,15 @@ bool UnitHarvestCommand::applyCommand(Step & step_p, State const &state_p, Comma
 		}
 		else if(!hasResourceToDrop(unit_l))
 		{
-			Logger::getDebug() << "UnitHarvestCommand:: no new resource found and no resource to drop"<<std::endl;
+			Logger::getNormal() << "UnitHarvestCommand:: no new resource found and no resource to drop"<<std::endl;
 			// no resource to drop -> command is over
 			return true;
 		}
-		Logger::getDebug() << "UnitHarvestCommand:: no new resource found "<<std::endl;
+		Logger::getNormal() << "UnitHarvestCommand:: no new resource found "<<std::endl;
 	}
 	else if(notFull_l && data_l._harvesting)
 	{
-		Logger::getDebug() << "UnitHarvestCommand:: is not full"<<std::endl;
+		Logger::getNormal() << "UnitHarvestCommand:: is not full"<<std::endl;
 		// in range if not harvest point and in range of resource
 		bool inRangeNoPoint_l = inRange(state_p, unit_l, data_l._resource) && data_l._idxSlot < 0 && !hasHarvestPoint(*res_l);
 		bool inRangePoint_l = hasHarvestPoint(*res_l) && data_l._idxSlot >= 0 && inRange(*unit_l, *res_l, data_l._idxSlot);
@@ -182,13 +182,13 @@ bool UnitHarvestCommand::applyCommand(Step & step_p, State const &state_p, Comma
 				step_p.addSteppable(new ResourceSlotStep(data_l._resource, data_l._idxSlot, _source, false));
 			}
 		}
-		Logger::getDebug() << "UnitHarvestCommand:: inRangeNoPoint = "<<inRangeNoPoint_l<<std::endl;
-		Logger::getDebug() << "UnitHarvestCommand:: inRangePoint = "<<inRangePoint_l<<std::endl;
-		Logger::getDebug() << "UnitHarvestCommand:: isHarvestPointFreeOrLocked = "<<isHarvestPointFreeOrLocked_l<<std::endl;
+		Logger::getNormal() << "UnitHarvestCommand:: inRangeNoPoint = "<<inRangeNoPoint_l<<std::endl;
+		Logger::getNormal() << "UnitHarvestCommand:: inRangePoint = "<<inRangePoint_l<<std::endl;
+		Logger::getNormal() << "UnitHarvestCommand:: isHarvestPointFreeOrLocked = "<<isHarvestPointFreeOrLocked_l<<std::endl;
 
 		if(inRangeNoPoint_l || (inRangePoint_l && isHarvestPointFreeOrLocked_l))
 		{
-			Logger::getDebug() << "UnitHarvestCommand:: gather"<<std::endl;
+			Logger::getNormal() << "UnitHarvestCommand:: gather"<<std::endl;
 			// If != type of resource we reset the unit resource gather info
 			if (unit_l->_typeOfResource != res_l->getType())
 			{
@@ -206,7 +206,7 @@ bool UnitHarvestCommand::applyCommand(Step & step_p, State const &state_p, Comma
 		}
 		else
 		{
-			Logger::getDebug() << "UnitHarvestCommand:: move to resource"<<std::endl;
+			Logger::getNormal() << "UnitHarvestCommand:: move to resource"<<std::endl;
 			// apply move
 			_subMoveCommand.applyCommand(step_p, state_p, data_p, pathManager_p);
 		}
@@ -216,7 +216,7 @@ bool UnitHarvestCommand::applyCommand(Step & step_p, State const &state_p, Comma
 	// if still harvesting or deposit is not available
 	if(data_l._harvesting || !state_p.isEntityAlive(data_l._deposit))
 	{
-		Logger::getDebug() << "UnitHarvestCommand:: look for deposit"<<std::endl;
+		Logger::getNormal() << "UnitHarvestCommand:: look for deposit"<<std::endl;
 		if(data_l._harvesting)
 		{
 			step_p.addSteppable(new CommandHarvestingChangeStep(_handleCommand, data_l._harvesting, false));
@@ -229,7 +229,7 @@ bool UnitHarvestCommand::applyCommand(Step & step_p, State const &state_p, Comma
 		Entity const * deposit_l = lookUpDeposit(state_p, _source, data_l._resource);
 		if(deposit_l)
 		{
-			Logger::getDebug() << "UnitHarvestCommand:: deposit found "<<deposit_l->_handle<<std::endl;
+			Logger::getNormal() << "UnitHarvestCommand:: deposit found "<<deposit_l->_handle<<std::endl;
 			// update move
 			step_p.addSteppable(new CommandDataWaypointSetStep(_handleCommand, data_l._waypoints, {deposit_l->_pos}));
 			step_p.addSteppable(new CommandMoveUpdateStep(_handleCommand, data_l._stepSinceUpdate, data_l._gridStatus, state_p.getPathGridStatus()));
@@ -238,7 +238,7 @@ bool UnitHarvestCommand::applyCommand(Step & step_p, State const &state_p, Comma
 		}
 		else
 		{
-			Logger::getDebug() << "UnitHarvestCommand:: no deposit found"<<std::endl;
+			Logger::getNormal() << "UnitHarvestCommand:: no deposit found"<<std::endl;
 			return true;
 		}
 	}
@@ -248,7 +248,7 @@ bool UnitHarvestCommand::applyCommand(Step & step_p, State const &state_p, Comma
 		if(inRange(state_p, unit_l, data_l._deposit))
 		{
 			Entity const * ent_l = state_p.getEntity(data_l._deposit);
-			Logger::getDebug() << "UnitHarvestCommand:: drop"<<std::endl;
+			Logger::getNormal() << "UnitHarvestCommand:: drop"<<std::endl;
 			step_p.addSteppable(new UnitHarvestDropStep(_source, unit_l->_quantityOfResource, unit_l->_quantityOfResource * ent_l->getHarvest()));
 			step_p.addSteppable(new CommandHarvestingChangeStep(_handleCommand, data_l._harvesting, true));
 
@@ -266,7 +266,7 @@ bool UnitHarvestCommand::applyCommand(Step & step_p, State const &state_p, Comma
 		}
 		else
 		{
-			Logger::getDebug() << "UnitHarvestCommand:: move to deposit"<<std::endl;
+			Logger::getNormal() << "UnitHarvestCommand:: move to deposit"<<std::endl;
 			// apply move
 			_subMoveCommand.applyCommand(step_p, state_p, data_p, pathManager_p);
 		}
