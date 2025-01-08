@@ -8,6 +8,7 @@
 #include "command/building/BuildingUnitCancelCommand.hh"
 #include "command/building/BuildingRallyPointCommand.hh"
 #include "command/building/BuildingUnitProductionCommand.hh"
+#include "command/building/BuildingGroupProductionCommand.hh"
 #include "command/building/BuildingUpgradeProductionCommand.hh"
 #include "command/debug/DebugCommand.hh"
 #include "command/entity/EntityAbilityCommand.hh"
@@ -30,6 +31,9 @@
 
 namespace octopus
 {
+
+typedef BuildingGroupProductionCommand<BuildingUnitProductionCommand, UnitModel> BuildingGroupUnitProductionCommand;
+typedef BuildingGroupProductionCommand<BuildingUpgradeProductionCommand, Upgrade> BuildingGroupUpgradeProductionCommand;
 
 template<typename T>
 void write(std::ofstream &file_p, T const &data_p)
@@ -425,6 +429,28 @@ void writeCommand(std::ofstream &file_p, Command const *cmd_p, Writer_t writer_p
         writer_p(file_p, typped_l->getHandleCommand());
         writer_p(file_p, typped_l->getModelId());
     }
+    else if(dynamic_cast<BuildingGroupUnitProductionCommand const *>(cmd_p))
+    {
+        writer_p(file_p, uint32_t(18));
+        BuildingGroupUnitProductionCommand const *typped_l = dynamic_cast<BuildingGroupUnitProductionCommand const *>(cmd_p);
+        writer_p(file_p, uint32_t(typped_l->getHandles().size()));
+        for(Handle const &handle_p : typped_l->getHandles())
+        {
+            writer_p(file_p, handle_p);
+        }
+        writer_p(file_p, typped_l->getModelId());
+    }
+    else if(dynamic_cast<BuildingGroupUpgradeProductionCommand const *>(cmd_p))
+    {
+        writer_p(file_p, uint32_t(19));
+        BuildingGroupUpgradeProductionCommand const *typped_l = dynamic_cast<BuildingGroupUpgradeProductionCommand const *>(cmd_p);
+        writer_p(file_p, uint32_t(typped_l->getHandles().size()));
+        for(Handle const &handle_p : typped_l->getHandles())
+        {
+            writer_p(file_p, handle_p);
+        }
+        writer_p(file_p, typped_l->getModelId());
+    }
     else if(dynamic_cast<DebugCommand const *>(cmd_p))
     {
         // NA
@@ -743,6 +769,48 @@ Command * readCommand(std::ifstream &file_p, Library const &lib_p)
 			model_l = &lib_p.getUnitModel(id_l);
 		}
         cmd_l = new BuildingAutoBuildCommand(source_l, model_l);
+	}
+	else if(cmdId_p == 18)
+	{
+        std::string id_l;
+        uint32_t size_l;
+        std::vector<Handle> handles_l;
+
+        read(file_p, &size_l);
+        for(uint32_t i = 0 ; i < size_l ; ++i)
+        {
+            Handle handle_l;
+            read(file_p, &handle_l);
+            handles_l.push_back(handle_l);
+        }
+        read(file_p, &id_l);
+		UnitModel const * model_l = nullptr;
+		if(lib_p.hasUnitModel(id_l))
+		{
+			model_l = &lib_p.getUnitModel(id_l);
+		}
+        cmd_l = new BuildingGroupUnitProductionCommand(handles_l, model_l);
+	}
+	else if(cmdId_p == 19)
+	{
+        std::string id_l;
+        uint32_t size_l;
+        std::vector<Handle> handles_l;
+
+        read(file_p, &size_l);
+        for(uint32_t i = 0 ; i < size_l ; ++i)
+        {
+            Handle handle_l;
+            read(file_p, &handle_l);
+            handles_l.push_back(handle_l);
+        }
+        read(file_p, &id_l);
+		Upgrade const * model_l = nullptr;
+		if(lib_p.hasUpgrade(id_l))
+		{
+			model_l = &lib_p.getUpgrade(id_l);
+		}
+        cmd_l = new BuildingGroupUpgradeProductionCommand(handles_l, model_l);
 	}
     if(!cmd_l)
     {

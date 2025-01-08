@@ -116,18 +116,12 @@ public:
 	virtual bool applyCommand(Step & step_p, State const &state_p, CommandData const *data_p, PathManager &pathManager_p) const override { return true; }
 
 	std::vector<Handle> const &getHandles() const { return _handles; }
-	std::string const &getModelId() const { return _model? _model->_id : ""; }
+	std::string getModelId() const { return _model? _model->_id : ""; }
 private:
 	std::vector<Handle> _handles;
 
 	Production_t const *_model {nullptr};
 };
-
-#include "BuildingUnitProductionCommand.hh"
-#include "BuildingUpgradeProductionCommand.hh"
-
-typedef BuildingGroupProductionCommand<BuildingUnitProductionCommand, UnitModel> BuildingGroupUnitProductionCommand;
-typedef BuildingGroupProductionCommand<BuildingUpgradeProductionCommand, Upgrade> BuildingGroupUpgradeProductionCommand;
 
 } // namespace octopus
 
