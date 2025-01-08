@@ -84,9 +84,14 @@ class BuildingGroupProductionCommand : public Command
 {
 public:
 	BuildingGroupProductionCommand() {}
-	BuildingGroupProductionCommand(std::vector<Handle> const &handles_p, Production_t const &model_p) :
-		_handles(handles_p), _model(&model_p)
-	{}
+	BuildingGroupProductionCommand(std::vector<Handle> const &handles_p, Production_t const *model_p) :
+		_handles(handles_p), _model(model_p)
+	{
+		if(_handles.size() > 0)
+		{
+			_handleCommand = _handles[0];
+		}
+	}
 
 	/// @brief register the command into the step
 	/// This method is responsible to
@@ -109,11 +114,20 @@ public:
 
 	/// @brief no op
 	virtual bool applyCommand(Step & step_p, State const &state_p, CommandData const *data_p, PathManager &pathManager_p) const override { return true; }
+
+	std::vector<Handle> const &getHandles() const { return _handles; }
+	std::string const &getModelId() const { return _model? _model->_id : ""; }
 private:
 	std::vector<Handle> _handles;
 
 	Production_t const *_model {nullptr};
 };
+
+#include "BuildingUnitProductionCommand.hh"
+#include "BuildingUpgradeProductionCommand.hh"
+
+typedef BuildingGroupProductionCommand<BuildingUnitProductionCommand, UnitModel> BuildingGroupUnitProductionCommand;
+typedef BuildingGroupProductionCommand<BuildingUpgradeProductionCommand, Upgrade> BuildingGroupUpgradeProductionCommand;
 
 } // namespace octopus
 
