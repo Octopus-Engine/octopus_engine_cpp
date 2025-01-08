@@ -18,6 +18,7 @@
 #include "command/entity/EntityFlockMoveCommand.hh"
 #include "command/entity/EntityMoveCommand.hh"
 #include "command/entity/EntityWaitCommand.hh"
+#include "command/move/GenericMoveCommand.hh"
 #include "command/unit/UnitDropCommand.hh"
 #include "command/unit/UnitHarvestCommand.hh"
 #include "command/player/PlayerChoseOptionCommand.hh"
@@ -451,6 +452,19 @@ void writeCommand(std::ofstream &file_p, Command const *cmd_p, Writer_t writer_p
         }
         writer_p(file_p, typped_l->getModelId());
     }
+    else if(dynamic_cast<GenericMoveCommand const *>(cmd_p))
+    {
+        writer_p(file_p, uint32_t(20));
+        GenericMoveCommand const *typped_l = dynamic_cast<GenericMoveCommand const *>(cmd_p);
+        writer_p(file_p, uint32_t(typped_l->getHandles().size()));
+        for(Handle const &handle_p : typped_l->getHandles())
+        {
+            writer_p(file_p, handle_p);
+        }
+		writer_p(file_p, typped_l->getTarget());
+		writer_p(file_p, typped_l->getTargetHandle());
+		writer_p(file_p, typped_l->isTargetSet());
+    }
     else if(dynamic_cast<DebugCommand const *>(cmd_p))
     {
         // NA
@@ -811,6 +825,28 @@ Command * readCommand(std::ifstream &file_p, Library const &lib_p)
 			model_l = &lib_p.getUpgrade(id_l);
 		}
         cmd_l = new BuildingGroupUpgradeProductionCommand(handles_l, model_l);
+	}
+	else if(cmdId_p == 20)
+	{
+        std::string id_l;
+        uint32_t size_l;
+        std::vector<Handle> handles_l;
+		Vector target;
+		Handle target_handle;
+		bool target_set = false;
+
+        read(file_p, &size_l);
+        for(uint32_t i = 0 ; i < size_l ; ++i)
+        {
+            Handle handle_l;
+            read(file_p, &handle_l);
+            handles_l.push_back(handle_l);
+        }
+		read(file_p, &target);
+		read(file_p, &target_handle);
+		read(file_p, &target_set);
+
+        cmd_l = new GenericMoveCommand(handles_l, target, target_handle, target_set);
 	}
     if(!cmd_l)
     {
